@@ -12,10 +12,9 @@ def extract():
     if request.method == 'POST':
         text = request.data.decode('utf-8')
         facts = extractor.extract_facts(text)
-        result = [{}]
+        result = []
         for f in facts:
-            if f is not None:
-                result.append(f.as_json)
+            result.append(f.as_json)
         return jsonify(result)
     else:
         return [{}]
