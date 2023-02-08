@@ -151,10 +151,13 @@ ORGANIZATION = or_(
 Contacts = fact('Contacts', ['phone', 'email'])
 PHONE = rule(type('PHONE')).interpretation(Contacts.phone)
 EMAIL = rule(type('EMAIL')).interpretation(Contacts.email)
-CONTACTS = rule(or_(rule(PHONE, PUNCT, EMAIL),
-                    rule(EMAIL, PHONE),
-                    rule(PHONE),
-                    rule(EMAIL))).interpretation(Contacts)
+PHONE_PUNCT_EMAIL = rule(PHONE, PUNCT, EMAIL).interpretation(Contacts)
+PHONE_EMAIL = rule(PHONE, EMAIL).interpretation(Contacts)
+EMAIL_PUNCT_PHONE = rule(EMAIL, PUNCT, PHONE).interpretation(Contacts)
+EMAIL_PHONE = rule(EMAIL, PHONE).interpretation(Contacts)
+PHONE_ONLY = rule(PHONE).interpretation(Contacts)
+EMAIL_ONLY = rule(EMAIL).interpretation(Contacts)
+CONTACTS = rule(or_(PHONE_EMAIL, PHONE_PUNCT_EMAIL, EMAIL_PHONE, EMAIL_PUNCT_PHONE, PHONE_ONLY, EMAIL_ONLY))
 
 Person = fact(
     'Person',
